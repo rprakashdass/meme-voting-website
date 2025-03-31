@@ -72,16 +72,16 @@ const MemeContainer = () => {
     return (
         <div className="p-5">
             <nav className="flex justify-between items-center bg-gray-800 p-4 rounded-lg text-white mb-5">
-                <span>Logged in as: <b>{userEmail}</b></span>
-                <div className="flex gap-3">
+                <div className="flex gap-3 flex-col">
+                    <span>Logged in as: <b>{userEmail}</b></span>
                     <button
-                        className="bg-yellow-500 px-4 py-2 rounded hover:bg-yellow-600"
+                        className="bg-yellow-500 md:px-4 px-1 md:py-2 py-1 rounded hover:bg-yellow-600"
                         onClick={() => setViewHistory(!viewHistory)}
                     >
                         {viewHistory ? "Back to Voting" : "View History"}
                     </button>
                     <button
-                        className="bg-red-500 px-4 py-2 rounded hover:bg-red-600"
+                        className="bg-red-500 md:px-4 px-1 md:py-2 py-1 rounded hover:bg-red-600"
                         onClick={handleLogout}
                     >
                         Logout
