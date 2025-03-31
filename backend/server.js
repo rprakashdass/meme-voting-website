@@ -15,7 +15,7 @@ const app = express();
 
 // Middleware
 app.use(cors({
-  origin: ["https://meme-royale.rprakashdass.in", "http://localhost:3000"],
+  origin: process.env.ALLOWED_ORIGIN,
   methods: "GET, POST, PUT, DELETE",
   allowedHeaders: "Content-Type, Authorization"
 }));
@@ -41,7 +41,7 @@ mongoose.connect(process.env.MONGO_URI)
   .catch(err => console.log('DB error:', err));
 
 // Server
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
