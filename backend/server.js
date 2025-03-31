@@ -2,38 +2,46 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const dotenv = require('dotenv');
+dotenv.config();
 
-// routes
-const memeRoutes = require('./Routes/memeRoutes')
-const userRoutes = require('./Routes/userRoutes')
+// Routes
+const memeRoutes = require('./Routes/memeRoutes');
+const userRoutes = require('./Routes/userRoutes');
 const memeOwnerRoutes = require('./Routes/memeOwnerRoutes');
+const authRoute = require('./Routes/auth')
 
-dotenv.config(); // Load environment variables
 
 const app = express();
 
-
 // Middleware
-app.use(express.json()); // Parse JSON request bodies
-app.use(cors()); // Enable CORS
+app.use(cors({
+  origin: ["https://meme-royale.rprakashdass.in", "http://localhost:3000"],
+  methods: "GET, POST, PUT, DELETE",
+  allowedHeaders: "Content-Type, Authorization"
+}));
 
-// Home route
+// Payload Limit for file upload
+app.use(express.json({ limit: "200mb" }));
+app.use(express.urlencoded({ limit: "200mb", extended: true }));
+
+// Home Route
 app.get("/", (req, res) => {
-  res.send("Meme Royal is listening! 🎉");
+  res.send("Meme Royal is listening!");
 });
 
 // Routes
 app.use('/memes', memeRoutes);
 app.use('/users', userRoutes);
 app.use('/owners', memeOwnerRoutes);
+app.use('/auth', authRoute);
 
-// Connect to MongoDB
+// MongoDB connection
 mongoose.connect(process.env.MONGO_URI)
-    .then(() => console.log('DB connected'))
-    .catch(err => console.log('DB error:', err));
+  .then(() => console.log('DB connected'))
+  .catch(err => console.log('DB error:', err));
 
-// Start the server
+// Server
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
+  console.log(`Server is running on port ${PORT}`);
 });

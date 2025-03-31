@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const MemeOwnerSchema = new mongoose.Schema({
     name: {
         type: String,
-        required: true
+        required: false
     },
     phoneNumber: {
         type: String,
@@ -11,7 +11,7 @@ const MemeOwnerSchema = new mongoose.Schema({
     },
     email: {
         type: String,
-        required: false,
+        required: true,
         match: [/.+@.+\..+/, 'Please enter a valid email address']
     }
 });

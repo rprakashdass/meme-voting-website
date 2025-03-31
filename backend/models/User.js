@@ -3,21 +3,17 @@ const mongoose = require('mongoose');
 const UserSchema = new mongoose.Schema({
     name: {
         type: String,
-        required: true
+        required: false
     },
     email: {
         type: String,
         required: true,
-        unique: true,
-        match: [/.+@.+\..+/, 'Please enter a valid email address']
+        unique: true
     },
-    phoneNumber: {
-        type: Number,
-        required: false
-    },
-    password: {
+    role: {
         type: String,
-        required: true
+        enum: ['user', 'admin'],
+        default: 'user'
     },
     votedMemes: [{
         type: mongoose.Schema.Types.ObjectId,

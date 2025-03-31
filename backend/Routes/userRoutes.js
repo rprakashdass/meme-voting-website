@@ -3,9 +3,8 @@ const router = express.Router();
 const User = require("../models/User");
 
 // Register a new user
-router.post('/register', async (req, res) => {
-    const { name, email, phoneNumber, password, votedMemes } = req.body; // ✅ Removed `()` from req.body
-
+router.post('/create', async (req, res) => {
+    const { name, email, phoneNumber, password, votedMemes } = req.body;
     try {
         const user = new User({
             name,
@@ -15,25 +14,55 @@ router.post('/register', async (req, res) => {
             votedMemes
         });
 
-        await user.save(); // ✅ Save user to DB
+        await user.save();
         res.status(201).json(user);
     } catch (error) {
-        res.status(400).json({ message: error.message }); // ✅ 400 for bad request
+        res.status(400).json({ message: error.message });
     }
 });
 
 // Get all users
-router.get('/all', async (req, res) => { // ✅ Use `async`
+router.get('/all', async (req, res) => {
     try {
-        const users = await User.find({}); // ✅ Await `find()`
-        if (!users || users.length === 0) { // ✅ Check for empty list
+        const users = await User.find({});
+        if (!users || users.length === 0) {
             return res.status(404).json({ message: "No users found!" });
         }
 
-        res.status(200).json(users); // ✅ 200 is correct for success
+        res.status(200).json(users);
     } catch (error) {
-        res.status(500).json({ message: error.message }); // ✅ 500 for server error
+        res.status(500).json({ message: error.message });
     }
 });
+
+// check if user exists
+router.post('/exists', async (req, res) => {
+    try {
+        const { email } = req.body;
+        if (!email) return res.status(400).json({ message: "Email is required" });
+
+        const user = await User.findOne({ email });
+        res.status(200).json({ exists: !!user });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+});
+
+// voted memes
+router.post('/user-votes', async (req, res) => {
+    try {
+        const { email } = req.body;
+        const user = await User.findOne({ email });
+
+        if (!user) {
+            return res.status(404).json({ message: "User not found", votedMemes: [] });
+        }
+
+        res.status(200).json({ votedMemes: user.votedMemes });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+});
+
 
 module.exports = router;

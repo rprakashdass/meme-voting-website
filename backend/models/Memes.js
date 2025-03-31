@@ -17,7 +17,7 @@ const memeSchema = new mongoose.Schema({
     votes: {
         type: Number,
         default: 0,
-        required: true
+        required: false
     }
 });
 
