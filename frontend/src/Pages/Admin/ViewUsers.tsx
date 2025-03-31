@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
+import SERVER_URL from '../../../config/api';
 
 type UserType = {
     _id: string;
@@ -15,7 +16,7 @@ const ViewUsers = () => {
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
-        axios.get("http://localhost:3000/users/all")
+        axios.get(`${SERVER_URL}/users/all`)
             .then(res => setUsers(res.data))
             .catch(err => {
                 setError("Failed to fetch users")

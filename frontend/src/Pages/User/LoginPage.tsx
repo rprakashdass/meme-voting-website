@@ -29,7 +29,7 @@ const LoginPage = () => {
             }
 
             await axios.post(`${SERVER_URL}/auth/send-otp`, { email });
-            alert("OTP sent! Check your email.");
+            alert("OTP sent! Kindly check your spam.");
             setStep(2);
         } catch (error) {
             console.error(error);

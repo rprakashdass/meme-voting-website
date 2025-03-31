@@ -10,7 +10,6 @@ const userRoutes = require('./Routes/userRoutes');
 const memeOwnerRoutes = require('./Routes/memeOwnerRoutes');
 const authRoute = require('./Routes/auth')
 
-
 const app = express();
 
 // Middleware
