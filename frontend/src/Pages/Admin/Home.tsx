@@ -1,5 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
+import SERVER_URL from "../../../config/api";
+import axios from "axios";
 
 const navItems = [
     {
@@ -22,14 +24,25 @@ const navItems = [
 
 const AdminHome = () => {
     const navigate = useNavigate();
+
     useEffect(() => {
         const userEmail = localStorage.getItem("userEmail");
-        const userRole = localStorage.getItem("userRole");
+
         if (!userEmail) {
-            navigate("/admin-login");
-        } else if (userRole !== "admin") {
-            navigate("/memes");
+            navigate("/");
+            return;
         }
+
+        axios.post(`${SERVER_URL}/admin/is-admin`, { email: userEmail })
+            .then((res) => {
+                if (!res.data.isAdmin) {
+                    navigate("/memes");
+                }
+            })
+            .catch((error) => {
+                console.error("Error checking admin role:", error);
+                navigate("/");
+            });
     }, [navigate]);
 
     const handleLogout = () => {
