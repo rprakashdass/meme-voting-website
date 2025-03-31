@@ -67,7 +67,34 @@ const MemeContainer = () => {
         navigate("/");
     };
 
-    if (loading) return <p className="text-center">Loading memes...</p>;
+    const loadingMessages = [
+        "🕵️‍♂️ Scouring the internet for the dankest memes... Hold tight! 🚀",
+        "🤔 Downloading memes from the cloud... of questionable humor.",
+        "😂 Preparing a meme buffet... Get your voting forks ready!",
+        "🛠️ Generating memes with AI... just kidding, these are handcrafted!",
+        "🚀 Loading faster than your WiFi on a bad day...",
+        "📡 Beaming memes straight from Area 51... please wait!",
+        "🧠 Training a monkey to type ‘Loading memes...’ Hold on!",
+        "⏳ Taking longer than expected? Great memes take time!",
+        "📦 Your memes are currently being shipped via pigeon express.",
+        "🚜 Farming some fresh memes... Harvesting soon!",
+        "💾 Downloading 100TB of memes... Just kidding, almost there!",
+        "👀 Peeking into your meme history for better recommendations... or not.",
+        "🔥 Roasting your patience while we fetch the best memes!",
+        "💨 Loading... still faster than Internet Explorer.",
+        "🕰️ If this takes too long, consider making your own memes!"
+    ];
+
+    const randomMessage = loadingMessages[Math.floor(Math.random() * loadingMessages.length)];
+
+    if (loading) {
+        return (
+            <p className="text-center bg-center font-mono font-bold h-screen flex flex-col justify-center items-center">
+                <p className="text-3xl">Loading!....</p>
+                <p className="text-xl">{randomMessage}</p>
+            </p>
+        );
+    }
 
     return (
         <div className="p-5 ob">
@@ -91,13 +118,15 @@ const MemeContainer = () => {
                 </div>
             </nav>
 
-            {votedMemes.length >= 3 && (
+            {votedMemes.length >= 3 ? (
                 <p className="text-red-500 text-center">You have reached the maximum vote limit.</p>
+            ) : (
+                <p className="text-red-500 text-center">You have {3 - votedMemes.length} votes remaining.</p>
             )}
 
             {viewHistory ? (
                 <div className="mb-5">
-                    <h2 className="text-xl font-bold text-center mb-4">Your Voted Memes:</h2>
+                    <h2 className="text-xl font-bold text-center mb-4">Your Voted Memes</h2>
                     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5">
                         {memes.filter(meme => votedMemes.includes(meme._id)).map(meme => (
                             <div key={meme._id} className="border rounded-lg p-3 shadow-lg">

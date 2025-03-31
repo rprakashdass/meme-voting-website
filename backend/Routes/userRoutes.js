@@ -64,5 +64,23 @@ router.post('/user-votes', async (req, res) => {
     }
 });
 
+router.post("/is-admin", async (req, res) => {
+    try {
+        const { email } = req.body;
+        if (!email) {
+            return res.status(400).json({ error: "Email is required" });
+        }
+
+        const user = await User.findOne({ email });
+        if (!user) {
+            return res.status(404).json({ error: "User not found" });
+        }
+
+        return res.json({ isAdmin: user.role === "admin" });
+    } catch (error) {
+        console.error("Error checking admin role:", error);
+        res.status(500).json({ error: "Internal server error" });
+    }
+});
 
 module.exports = router;

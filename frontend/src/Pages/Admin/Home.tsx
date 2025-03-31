@@ -33,7 +33,7 @@ const AdminHome = () => {
             return;
         }
 
-        axios.post(`${SERVER_URL}/admin/is-admin`, { email: userEmail })
+        axios.post(`${SERVER_URL}/users/is-admin`, { email: userEmail })
             .then((res) => {
                 if (!res.data.isAdmin) {
                     navigate("/memes");
@@ -54,13 +54,23 @@ const AdminHome = () => {
         <div className="p-5">
             {/* Admin Navbar */}
             <nav className="flex justify-between items-center bg-gray-800 text-white p-4 rounded-lg mb-5">
-                <span className="text-lg font-semibold">Admin Dashboard</span>
-                <button
-                    className="bg-red-500 px-4 py-2 rounded hover:bg-red-600"
-                    onClick={handleLogout}
-                >
-                    Logout
-                </button>
+                <div className="flex flex-col md:flex-row w-full justify-between gap-3">
+                    <span className="text-lg font-semibold">Admin Dashboard</span>
+                    <div className="flex flex-row gap-2">
+                    <button
+                        className="bg-yellow-500 px-4 py-2 rounded hover:bg-yellow-600"
+                        onClick={()=>{navigate("/")}}
+                    >
+                        View as User
+                    </button>
+                    <button
+                        className="bg-red-500 px-4 py-2 rounded hover:bg-red-600"
+                        onClick={handleLogout}
+                    >
+                        Logout
+                    </button>
+                    </div>
+                </div>
             </nav>
 
             {/* Admin Dashboard Cards */}
