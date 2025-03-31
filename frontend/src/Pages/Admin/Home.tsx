@@ -1,36 +1,66 @@
+import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
 
 const navItems = [
     {
-        title : 'Users',
-        link : 'http://localhost:5173/admin/users'
+        title: 'View Users',
+        link: '/admin/view-users'
     },
     {
-        title : 'Meme Owners',
-        link : ''
+        title: 'Add Meme Owners',
+        link: '/admin/add-meme-owners'
     },
     {
-        title : 'Memes',
-        link : ''
+        title: 'View Meme Owners',
+        link: '/admin/view-meme-owners'
     },
-]
+    {
+        title: 'Upload Memes',
+        link: '/admin/upload-memes'
+    },
+];
 
 const AdminHome = () => {
-  return (
-    <div className="m-5">
-        <div className="flex items-center justify-center">
-            <div className="flex flex-row gap-5 flex-wrap justify-center items-center">
-                {
-                    navItems.map( (item, id) => (
-                        <div className="flex flex-col p-5 justify-center items-center border border-blue-600 gap-5" key={id}>
-                                <h1>{item.title}</h1>
-                                <a href={item.link} className="button bg-blue-600 px-3 py-2 rounded-md">click here</a>
-                        </div>
-                    ))
-                }
+    const navigate = useNavigate();
+    useEffect(() => {
+        const userEmail = localStorage.getItem("userEmail");
+        const userRole = localStorage.getItem("userRole");
+        if (!userEmail) {
+            navigate("/admin-login");
+        } else if (userRole !== "admin") {
+            navigate("/memes");
+        }
+    }, [navigate]);
+
+    const handleLogout = () => {
+        localStorage.removeItem("userEmail");
+        navigate("/");
+    };
+
+    return (
+        <div className="p-5">
+            {/* Admin Navbar */}
+            <nav className="flex justify-between items-center bg-gray-800 text-white p-4 rounded-lg mb-5">
+                <span className="text-lg font-semibold">Admin Dashboard</span>
+                <button
+                    className="bg-red-500 px-4 py-2 rounded hover:bg-red-600"
+                    onClick={handleLogout}
+                >
+                    Logout
+                </button>
+            </nav>
+
+            {/* Admin Dashboard Cards */}
+            <div className="flex flex-wrap justify-center gap-6">
+                {navItems.map((item, id) => (
+                    <a href={item.link} key={id} className="block w-56 p-5 text-center border border-blue-600 rounded-lg shadow-lg hover:bg-blue-600 hover:text-white transition">
+                        <h1 className="text-lg font-bold">{item.title}</h1>
+                        <button className="mt-3 bg-blue-500 px-3 py-2 rounded-md text-white">Click Here</button>
+                    </a>
+                ))}
             </div>
         </div>
-    </div>
-  )
-}
+    );
+};
 
 export default AdminHome;
