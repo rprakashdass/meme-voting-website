@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import SERVER_URL from '../../../config/api';
+import Loading from '../../util/Loading';
 
 type UserType = {
     _id: string;
@@ -25,7 +26,7 @@ const ViewUsers = () => {
             .finally(() => setLoading(false));
     }, []);
 
-    if (loading) return <div className="text-center p-5">Loading users...</div>;
+    if (loading) return <Loading/>
     if (error) return <div className="text-center text-red-500 p-5">{error}</div>;
 
     return (

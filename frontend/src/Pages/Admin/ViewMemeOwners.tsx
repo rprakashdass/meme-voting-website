@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import SERVER_URL from "../../../config/api";
+import Loading from "../../util/Loading";
 
 type Owner = {
     _id: string;
@@ -27,7 +28,7 @@ const ViewMemeOwners = () => {
             });
     }, []);
 
-    if (loading) return <p className="text-center text-gray-500">Loading meme owners...</p>;
+    if (loading) return <Loading/>;
     if (error) return <p className="text-center text-red-500">{error}</p>;
 
     return (
