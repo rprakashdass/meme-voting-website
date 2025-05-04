@@ -20,6 +20,10 @@ const navItems = [
         title: 'Upload Memes',
         link: '/admin/upload-memes'
     },
+    {
+        title: 'View Memes',
+        link: '/admin/view-memes'
+    }
 ];
 
 const AdminHome = () => {

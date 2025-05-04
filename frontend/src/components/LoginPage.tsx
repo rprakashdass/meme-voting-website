@@ -1,24 +1,28 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import SERVER_URL from "../../../config/api";
+import SERVER_URL from "../../config/api";
 
 const LoginPage = () => {
     const navigate = useNavigate();
-    useEffect(()=>{
+    useEffect(() => {
         const userEmail = localStorage.getItem("userEmail");
-        if(userEmail){
+        if (userEmail) {
             navigate("/memes");
         }
-    }, [navigate])
+    }, [navigate]);
 
     const [email, setEmail] = useState("");
     const [otp, setOtp] = useState("");
     const [step, setStep] = useState(1);
     const [message, setMessage] = useState("");
+    const [isSendingOtp, setIsSendingOtp] = useState(false);
+    const [isVerifyingOtp, setIsVerifyingOtp] = useState(false);
+    const [showAdminChoice, setShowAdminChoice] = useState(false);
 
     const handleSendOTP = async (e: React.FormEvent) => {
         e.preventDefault();
+        setIsSendingOtp(true);
         try {
             const response = await axios.post(`${SERVER_URL}/auth/check-user`, { email });
 
@@ -34,18 +38,18 @@ const LoginPage = () => {
         } catch (error) {
             console.error(error);
             alert("Failed to send OTP. Try again.");
+        } finally {
+            setIsSendingOtp(false);
         }
     };
-    const [showAdminChoice, setShowAdminChoice] = useState(false);
 
     const handleVerifyOTP = async (e: React.FormEvent) => {
         e.preventDefault();
+        setIsVerifyingOtp(true);
         try {
             const response = await axios.post(`${SERVER_URL}/auth/verify-otp`, { email, otp });
             localStorage.setItem("userEmail", email);
             localStorage.setItem("userRole", response.data.role);
-
-            alert("OTP verified successfully!");
 
             if (response.data.role === "admin") {
                 setShowAdminChoice(true);
@@ -55,6 +59,8 @@ const LoginPage = () => {
         } catch (error) {
             console.error(error);
             alert("Invalid OTP. Try again.");
+        } finally {
+            setIsVerifyingOtp(false);
         }
     };
 
@@ -81,7 +87,7 @@ const LoginPage = () => {
                     {step === 1 ? (
                         <>
                             <h2 className="text-xl font-bold mb-4">Enter Your Email</h2>
-                            {message && <p className="text-gray-600 mb-2">{message}</p>}
+                            {message && <p className="text-red-400 mb-2">{message}</p>}
                             <form onSubmit={handleSendOTP}>
                                 <input
                                     type="email"
@@ -90,11 +96,23 @@ const LoginPage = () => {
                                     placeholder="Enter your email"
                                     className="border p-2 w-full mb-3"
                                     required
+                                    disabled={isSendingOtp}
                                 />
-                                <button type="submit" className="bg-blue-500 text-white p-2 rounded w-full">
-                                    Send OTP
+                                <button
+                                    type="submit"
+                                    className={`p-2 rounded w-full ${
+                                        isSendingOtp
+                                            ? "bg-gray-400 text-white cursor-not-allowed"
+                                            : "bg-blue-500 text-white"
+                                    }`}
+                                    disabled={isSendingOtp}
+                                >
+                                    {isSendingOtp ? "Sending OTP..." : "Send OTP"}
                                 </button>
                             </form>
+                            <p className="text-sm text-red-400 mt-2">
+                                Note: Please check your spam folder if you don't receive the OTP in your inbox.
+                            </p>
                         </>
                     ) : (
                         <>
@@ -114,17 +132,27 @@ const LoginPage = () => {
                                     className="border p-2 w-full mb-3"
                                     required
                                 />
-                                <button type="submit" className="bg-green-500 text-white p-2 rounded w-full">
-                                    Verify OTP
+                                <button
+                                    type="submit"
+                                    className={`p-2 rounded w-full ${
+                                        isVerifyingOtp
+                                            ? "bg-gray-400 text-white cursor-not-allowed"
+                                            : "bg-green-500 text-white"
+                                    }`}
+                                    disabled={isVerifyingOtp}
+                                >
+                                    {isVerifyingOtp ? "Authorizing..." : "Verify OTP"}
                                 </button>
                             </form>
+                            <p className="text-sm text-red-400 mt-2">
+                                Note: Please check your spam folder.
+                            </p>
                         </>
                     )}
                 </div>
             )}
         </div>
     );
-
 };
 
 export default LoginPage;

@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import SERVER_URL from "../../../config/api";
 import Loading from "../../util/Loading";
+import Footer from '../../components/Footer';
 
 interface Meme {
     _id: string;
@@ -139,6 +140,7 @@ const MemeContainer = () => {
                     </div>
                 </>
             )}
+        <Footer/>
         </div>
     );
 };

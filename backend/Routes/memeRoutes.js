@@ -89,4 +89,21 @@ router.post("/vote", async (req, res) => {
     }
 });
 
+// DELETE a meme by ID
+router.delete('/delete/:id', async (req, res) => {
+    const { id } = req.params;
+
+    try {
+        const deletedMeme = await Memes.findByIdAndDelete(id);
+
+        if (!deletedMeme) {
+            return res.status(404).json({ message: "Meme not found" });
+        }
+
+        res.status(200).json({ message: "Meme successfully deleted", meme: deletedMeme });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+});
+
 module.exports = router;

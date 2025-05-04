@@ -2,10 +2,11 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Home from './Pages/User/Home';
 import { AdminHome } from './Pages/Admin';
 import UploadMeme from './Pages/Admin/UploadMeme';
-import LoginPage from './Pages/User/LoginPage';
+import LoginPage from './components/LoginPage';
 import { AddMemeOwners } from './Pages/Admin/AddMemeOwners';
 import ViewUsers from './Pages/Admin/ViewUsers';
 import ViewMemeOwners from './Pages/Admin/ViewMemeOwners';
+import ViewMemes from './Pages/Admin/ViewMemes';
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
         <Route path='admin/view-users' element={<ViewUsers/>}/>
         <Route path='admin/upload-memes' element={<UploadMeme/>}/>
         <Route path='admin/view-meme-owners' element={<ViewMemeOwners/>}/>
+        <Route path='admin/view-memes' element={<ViewMemes/>}/>
       </Routes>
     </BrowserRouter>
   );
